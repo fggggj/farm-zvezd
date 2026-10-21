@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>FARM ЗВЕЗД</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(#422607,#080604);
+color:white;font-family:Arial,sans-serif;text-align:center}
+.app{max-width:450px;margin:auto;padding:22px}
+h1{color:#ffd044}
+.card{background:#17120b;border:1px solid #9c741c;
+border-radius:18px;padding:15px;margin:15px 0}
+.star{font-size:150px;color:#ffc52e;cursor:pointer;
+text-shadow:0 0 35px orange;border:0;background:none}
+button{cursor:pointer}
+.btn{width:100%;padding:17px;margin:8px 0;border:0;
+border-radius:15px;background:linear-gradient(#ffe16b,#ff9900);
+font-size:19px;font-weight:bold;color:#281600}
+.small{background:#20190e;color:#ffcf43;border:1px solid #9c741c;
+border-radius:12px;padding:13px;margin:4px}
+#offer{display:none;position:fixed;inset:0;background:#000d;
+align-items:center;justify-content:center;padding:20px}
+.popup{background:#211a10;border:1px solid #ffc52e;
+border-radius:22px;padding:25px;width:100%;max-width:380px}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>⭐ FARM ЗВЕЗД ⭐</h1>
+<div class="card">Сколько накликано:<br>
+<strong style="font-size:32px" id="clicks">0</strong></div>
+<button class="star" id="star">★</button>
+<p>Нажимай на звезду и копи игровые очки!</p>
+<div class="card">👹 Твой первый босс<br>
+Здоровье: <span id="hp">100</span> HP</div>
+<button class="btn" id="boss">Бей босса!</button>
+<div class="card">⭐ Баланс: <span id="balance">0</span></div>
+<button class="btn" id="subscription">🎁 Подписка</button>
+<p style="color:#aaa;font-size:12px">
+Демо-версия. Это игровые очки, не настоящие Telegram Stars.
+</p>
+</div>
+
+<div id="offer">
+<div class="popup">
+<h2>🌟 Подписка</h2>
+<p>Ты набрал 633 нажатия!</p>
+<p>Стоимость: ⭐ 10 игровых очков</p>
+<button class="btn" id="buy">Подписаться за ⭐ 10</button>
+<button class="small" id="close">Закрыть</button>
+</div>
+</div>
+
+<script>
+const tg=window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+let clicks=0,balance=0,hp=100,subscribed=false;
+const $=id=>document.getElementById(id);
+
+function draw(){
+ $("clicks").textContent=clicks;
+ $("balance").textContent=balance;
+ $("hp").textContent=hp;
+}
+
+$("star").onclick=()=>{
+ clicks++;
+ balance++;
+ draw();
+ if(clicks===633) $("offer").style.display="flex";
+};
+
+$("boss").onclick=()=>{
+ hp-=10;
+ if(hp<=0){
+   hp=100;
+   balance+=25;
+   alert("🏆 Босс побеждён! +25 игровых очков");
+ }
+ draw();
+};
+
+$("subscription").onclick=()=>{
+ $("offer").style.display="flex";
+};
+
+$("close").onclick=()=>{
+ $("offer").style.display="none";
+};
+
+$("buy").onclick=()=>{
+ if(balance<10){
+   alert("Недостаточно игровых очков!");
+   return;
+ }
+ if(subscribed){
+   alert("Подписка уже активна!");
+   return;
+ }
+ balance-=10;
+ subscribed=true;
+ $("offer").style.display="none";
+ alert("✅ Демо-подписка активирована!");
+ draw();
+};
+</script>
+</body>
+</html>
